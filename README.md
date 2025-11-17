@@ -6,6 +6,8 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/MeetHayer/options-bsm-montecarlo-toolkit/HEAD?labpath=notebooks)
 
+**Quick Start with Binder:** Click the Binder badge above to launch an interactive JupyterLab environment in your browser (no installation required). Once it loads, click on the `notebooks` folder in the file browser, then open any of the three Jupyter notebooks. For optimal experience with all interactive widgets and graphs, run all cells using `Cell → Run All` from the menu.
+
 An educational Python toolkit for option pricing using Black-Scholes-Merton and Monte Carlo methods.
 
 ## Features
@@ -46,6 +48,8 @@ Three interactive notebooks in `notebooks/`:
 3. **Monte Carlo & Strategies** - MC simulation, straddles, hedging
 
 **🚀 [Launch Notebooks in Binder](https://mybinder.org/v2/gh/MeetHayer/options-bsm-montecarlo-toolkit/HEAD?labpath=notebooks)** (Click to run interactively in your browser)
+
+**Using Binder:** Click the link above → Wait for environment to build (2-3 min) → Click `notebooks` folder → Open any notebook → Use `Cell → Run All` for full interactive experience with all graphs and widgets.
 
 Or run locally: `jupyter notebook notebooks/`
 

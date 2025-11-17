@@ -4,6 +4,7 @@
 # Options BSM & Monte Carlo Toolkit
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/MeetHayer/options-bsm-montecarlo-toolkit/HEAD?labpath=notebooks)
 
 An educational Python toolkit for option pricing using Black-Scholes-Merton and Monte Carlo methods.
 
@@ -44,7 +45,9 @@ Three interactive notebooks in `notebooks/`:
 2. **Implied Volatility** - IV solver, volatility surfaces, price sensitivity
 3. **Monte Carlo & Strategies** - MC simulation, straddles, hedging
 
-Run with: `jupyter notebook notebooks/`
+**🚀 [Launch Notebooks in Binder](https://mybinder.org/v2/gh/MeetHayer/options-bsm-montecarlo-toolkit/HEAD?labpath=notebooks)** (Click to run interactively in your browser)
+
+Or run locally: `jupyter notebook notebooks/`
 
 ## Documentation
 

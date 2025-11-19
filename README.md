@@ -6,7 +6,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/MeetHayer/options-bsm-montecarlo-toolkit/HEAD?labpath=notebooks)
 
-**Quick Start with Binder:** Click the Binder badge above to launch an interactive JupyterLab environment in your browser (no installation required). Once it loads, click on the `notebooks` folder in the file browser, then open any of the three Jupyter notebooks. For optimal experience with all interactive widgets and graphs, run all cells using `Cell → Run All` from the menu.
+**Quick Start with Binder:** Click the Binder badge above to launch an interactive JupyterLab environment in your browser (no installation required). Once it loads, click on the `notebooks` folder in the file browser, then open any of the three Jupyter notebooks. For optimal experience with all interactive widgets and graphs, run all cells using `Cell → Run All` from the menu, then **wait about 1 minute** for all cells to complete execution and all visualizations to render properly.
 
 An educational Python toolkit for option pricing using Black-Scholes-Merton and Monte Carlo methods.
 
@@ -15,7 +15,7 @@ An educational Python toolkit for option pricing using Black-Scholes-Merton and 
 - **Black-Scholes-Merton Pricing**: European calls/puts with analytical Greeks (Delta, Gamma, Vega, Theta, Rho)
 - **Implied Volatility Solver**: Newton-Raphson method to recover volatility from market prices
 - **Monte Carlo Simulation**: GBM path simulation and European option pricing
-- **Option Strategies**: Straddles, delta hedging, vega hedging
+- **Option Strategies**: Straddles, strangles, delta hedging, vega hedging
 - **Interactive Notebooks**: Jupyter notebooks with widgets for exploration
 - **Visualization**: Payoff diagrams, Greeks charts, volatility surfaces
 
@@ -45,11 +45,11 @@ print(f"Delta: {greeks['delta']:.4f}")
 Three interactive notebooks in `notebooks/`:
 1. **BSM Pricing and Greeks** - Option pricing, Greeks computation, payoff diagrams
 2. **Implied Volatility** - IV solver, volatility surfaces, price sensitivity
-3. **Monte Carlo & Strategies** - MC simulation, straddles, hedging
+3. **Monte Carlo & Strategies** - MC simulation, straddles, strangles, hedging
 
 **🚀 [Launch Notebooks in Binder](https://mybinder.org/v2/gh/MeetHayer/options-bsm-montecarlo-toolkit/HEAD?labpath=notebooks)** (Click to run interactively in your browser)
 
-**Using Binder:** Click the link above → Wait for environment to build (2-3 min) → Click `notebooks` folder → Open any notebook → Use `Cell → Run All` for full interactive experience with all graphs and widgets.
+**Using Binder:** Click the link above → Wait for environment to build (2-3 min) → Click `notebooks` folder → Open any notebook → Use `Cell → Run All` → **Wait ~1 minute** for all cells to complete and visualizations to render for the full interactive experience.
 
 Or run locally: `jupyter notebook notebooks/`
 

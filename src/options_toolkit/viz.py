@@ -146,6 +146,78 @@ def plot_straddle_payoff(
     return fig
 
 
+def plot_strangle_payoff(
+    S_range: np.ndarray,
+    pnl: np.ndarray,
+    K_put: float,
+    K_call: float,
+    breakeven_lower: float,
+    breakeven_upper: float,
+    figsize: tuple = (10, 6),
+) -> plt.Figure:
+    """
+    Plot P&L for a strangle position with highlighted features.
+    
+    Parameters
+    ----------
+    S_range : np.ndarray
+        Array of stock prices
+    pnl : np.ndarray
+        P&L values for the strangle
+    K_put : float
+        OTM put strike price
+    K_call : float
+        OTM call strike price
+    breakeven_lower : float
+        Lower breakeven point
+    breakeven_upper : float
+        Upper breakeven point
+    figsize : tuple, optional
+        Figure size
+    
+    Returns
+    -------
+    plt.Figure
+        Matplotlib figure object
+    """
+    fig, ax = plt.subplots(figsize=figsize)
+    
+    # Plot P&L
+    ax.plot(S_range, pnl, 'b-', linewidth=2.5, label='Strangle P&L')
+    
+    # Zero line
+    ax.axhline(y=0, color='k', linestyle='--', linewidth=0.8, alpha=0.7)
+    
+    # Mark strikes
+    ax.axvline(x=K_put, color='purple', linestyle='-', linewidth=1, alpha=0.5, 
+              label=f'Put Strike: {K_put:.2f}')
+    ax.axvline(x=K_call, color='orange', linestyle='-', linewidth=1, alpha=0.5, 
+              label=f'Call Strike: {K_call:.2f}')
+    
+    # Mark breakeven points
+    ax.axvline(x=breakeven_lower, color='r', linestyle=':', linewidth=1.5, 
+              label=f'Lower BE: {breakeven_lower:.2f}')
+    ax.axvline(x=breakeven_upper, color='r', linestyle=':', linewidth=1.5, 
+              label=f'Upper BE: {breakeven_upper:.2f}')
+    
+    # Shade profit/loss regions
+    profit_mask = pnl > 0
+    loss_mask = pnl <= 0
+    ax.fill_between(S_range, 0, pnl, where=profit_mask, alpha=0.2, color='green', 
+                    label='Profit region')
+    ax.fill_between(S_range, 0, pnl, where=loss_mask, alpha=0.2, color='red', 
+                    label='Loss region')
+    
+    ax.set_xlabel('Stock Price at Expiration', fontsize=12)
+    ax.set_ylabel('Profit / Loss', fontsize=12)
+    ax.set_title('Long Strangle P&L (HIGHER RISK, LOWER COST)', fontsize=14, fontweight='bold')
+    ax.grid(True, alpha=0.3)
+    ax.legend(fontsize=9, loc='best')
+    
+    plt.tight_layout()
+    return fig
+
+
 def plot_delta_hedge_comparison(
     S_range: np.ndarray,
     pnl_unhedged: np.ndarray,

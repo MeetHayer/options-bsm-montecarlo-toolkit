@@ -1,5 +1,5 @@
 """
-Option strategies: straddles, delta hedging, vega hedging.
+Option strategies: straddles, strangles, delta hedging, vega hedging.
 
 Provides illustrative examples of common option strategies with
 detailed explanations of their purpose and limitations.
@@ -111,6 +111,142 @@ def long_straddle_analysis(
         'pnl': pnl,
         'breakeven_lower': breakeven_lower,
         'breakeven_upper': breakeven_upper,
+    }
+
+
+def long_strangle_analysis(
+    S0: float,
+    K_put: float,
+    K_call: float,
+    r: float,
+    sigma: float,
+    T: float,
+    S_range: np.ndarray | None = None,
+) -> Dict:
+    """
+    Analyze a long strangle: long OTM call + long OTM put at different strikes.
+    
+    A long strangle is similar to a straddle but RISKIER and CHEAPER.
+    It uses OTM options (K_put < S0 < K_call), making it cheaper to enter
+    but requiring a LARGER price move to profit.
+    
+    STRANGLE vs STRADDLE:
+    - Strangle: OTM call + OTM put → LOWER cost, HIGHER risk (needs bigger move)
+    - Straddle: ATM call + ATM put → HIGHER cost, LOWER risk (easier to profit)
+    
+    When to use:
+    - Expect extreme volatility but want lower upfront cost than straddle
+    - Willing to accept higher risk for lower premium
+    - Before major binary events (earnings, FDA, mergers) when you're very bullish on movement
+    
+    Risks (HIGHER than straddle):
+    - Requires LARGER move to break even (wider breakeven range)
+    - Both options are OTM → more likely to expire worthless
+    - Time decay on both positions
+    - If price stays between strikes, lose entire premium
+    
+    Parameters
+    ----------
+    S0 : float
+        Current stock price
+    K_put : float
+        Strike price for the OTM put (should be < S0)
+    K_call : float
+        Strike price for the OTM call (should be > S0)
+    r : float
+        Risk-free rate (annualized)
+    sigma : float
+        Volatility (annualized)
+    T : float
+        Time to expiration in years
+    S_range : np.ndarray, optional
+        Array of stock prices for P&L analysis. If None, uses S0 ± 50%
+    
+    Returns
+    -------
+    dict
+        Contains:
+        - 'call_price': BSM call price (OTM)
+        - 'put_price': BSM put price (OTM)
+        - 'total_cost': Total premium paid (< straddle cost)
+        - 'call_greeks': Dict of call Greeks
+        - 'put_greeks': Dict of put Greeks
+        - 'net_greeks': Dict of combined Greeks
+        - 'S_range': Stock price array for P&L
+        - 'pnl': P&L values at expiration for each S in S_range
+        - 'breakeven_lower': Lower breakeven point (< K_put)
+        - 'breakeven_upper': Upper breakeven point (> K_call)
+        - 'strike_width': K_call - K_put (wider = more risk)
+    
+    Examples
+    --------
+    >>> result = long_strangle_analysis(100, 95, 105, 0.05, 0.25, 0.5)
+    >>> result['total_cost'] < 10  # Cheaper than ATM straddle
+    True
+    >>> result['strike_width']
+    10.0
+    >>> result['breakeven_upper'] - result['breakeven_lower'] > 15  # Wider breakeven range
+    True
+    
+    Notes
+    -----
+    The strangle is a more aggressive volatility bet than the straddle.
+    It's cheaper to enter but requires a more significant price movement to profit.
+    Traders use strangles when they expect explosive moves but want to minimize
+    upfront capital at the cost of higher risk.
+    """
+    # Validate strikes
+    if K_put >= S0:
+        raise ValueError(f"K_put ({K_put}) should be < S0 ({S0}) for OTM put")
+    if K_call <= S0:
+        raise ValueError(f"K_call ({K_call}) should be > S0 ({S0}) for OTM call")
+    
+    # Price the options (both OTM, so cheaper than ATM)
+    call_price = bsm_call_price(S0, K_call, r, sigma, T)
+    put_price = bsm_put_price(S0, K_put, r, sigma, T)
+    total_cost = call_price + put_price
+    
+    # Compute Greeks
+    call_greeks = bsm_call_greeks(S0, K_call, r, sigma, T)
+    put_greeks = bsm_put_greeks(S0, K_put, r, sigma, T)
+    
+    # Net Greeks for the strangle
+    net_greeks = {
+        key: call_greeks[key] + put_greeks[key]
+        for key in call_greeks.keys()
+    }
+    
+    # P&L analysis over a range of stock prices
+    if S_range is None:
+        S_range = np.linspace(S0 * 0.5, S0 * 1.5, 100)
+    
+    # P&L at expiration: max(S - K_call, 0) + max(K_put - S, 0) - total_cost
+    call_payoff = np.maximum(S_range - K_call, 0)
+    put_payoff = np.maximum(K_put - S_range, 0)
+    pnl = call_payoff + put_payoff - total_cost
+    
+    # Breakeven points:
+    # Lower: K_put - total_cost (need put to be ITM by premium amount)
+    # Upper: K_call + total_cost (need call to be ITM by premium amount)
+    breakeven_lower = K_put - total_cost
+    breakeven_upper = K_call + total_cost
+    
+    strike_width = K_call - K_put
+    
+    return {
+        'call_price': call_price,
+        'put_price': put_price,
+        'total_cost': total_cost,
+        'call_greeks': call_greeks,
+        'put_greeks': put_greeks,
+        'net_greeks': net_greeks,
+        'S_range': S_range,
+        'pnl': pnl,
+        'breakeven_lower': breakeven_lower,
+        'breakeven_upper': breakeven_upper,
+        'strike_width': strike_width,
+        'K_put': K_put,
+        'K_call': K_call,
     }
 
 
